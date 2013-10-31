@@ -1,0 +1,18 @@
+GIT
+  remote: git://github.com/opal/opal.git
+  revision: 4986f119b306d3061f31a94debbd3331f63c082e
+  specs:
+    opal (0.4.4)
+      source_map
+
+GEM
+  specs:
+    json (1.8.1)
+    source_map (3.0.1)
+      json
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  opal!

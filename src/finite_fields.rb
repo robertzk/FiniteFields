@@ -1,36 +1,34 @@
-=begin
-
-    This program looks for a representation of F_p^n by starting with
- 1..p-1 as the candidates for the leading coefficient of a polynomial
- P(x) in the ring F_p[x] of polynomials over F_p, then using the digits
- of p^(n-1) - 1 through 0 in base p for the rest of the coefficients,
- and attempting to check if each such enumerated polynomial is irreducible mod p.
- This gives a representation by an irreducible polynomial with "big" coefficients.
- Arithmetic is then defined naturally.
-
-    Below is a log in the Ruby console of some example calculations with the
- polynomial x^2 + x + 1 realized as an element of the finite field
- F_11^3 represented by F_11[x] / (x^3 + 9x^2 + 10x + 10)
-
- irb(main):130:0> ff = FiniteField.new(11, 3)
-  Constructing irreducible polynomial...
-  Found Polynomial of degree 3 mod 11: x^3 + 9x^2 + 10x + 10...
-  You can now play with this field as it is realized inside F_11[X] / (x^3 + 9x^2 + 10x + 10)
- => Finite Field of degree 1331 = 11^3 represented by F_1331[x] / (x^3 + 9x^2 + 10x + 10)
- irb(main):131:0> ffe = FiniteFieldElement.new(ff, 1,1,1)
- => Polynomial of degree 2 mod 11: x^2 + x + 1 embedded in Finite Field of degree 1331 = 11^3 represented by F_1331[x] / (x^3 + 9x^2 + 10x + 10)
- irb(main):132:0> ffe + 1
- => Polynomial of degree 2 mod 11: x^2 + x + 2 embedded in Finite Field of degree 1331 = 11^3 represented by F_1331[x] / (x^3 + 9x^2 + 10x + 10)
- irb(main):133:0> ffe + 10
- => Polynomial of degree 2 mod 11: x^2 + x embedded in Finite Field of degree 1331 = 11^3 represented by F_1331[x] / (x^3 + 9x^2 + 10x + 10)
- irb(main):134:0> ffe * ffe
- => Polynomial of degree 2 mod 11: x^2 + 7x + 5 embedded in Finite Field of degree 1331 = 11^3 represented by F_1331[x] / (x^3 + 9x^2 + 10x + 10)
- irb(main):135:0> -ffe
- => Polynomial of degree 2 mod 11: 10x^2 + 10x + 10 embedded in Finite Field of degree 1331 = 11^3 represented by F_1331[x] / (x^3 + 9x^2 + 10x + 10)
- irb(main):136:0> ffe - ffe
- => Polynomial of degree 0 mod 11: 0 embedded in Finite Field of degree 1331 = 11^3 represented by F_1331[x] / (x^3 + 9x^2 + 10x + 10)
-
-=end
+#
+#    This program looks for a representation of F_p^n by starting with
+# 1..p-1 as the candidates for the leading coefficient of a polynomial
+# P(x) in the ring F_p[x] of polynomials over F_p, then using the digits
+# of p^(n-1) - 1 through 0 in base p for the rest of the coefficients,
+# and attempting to check if each such enumerated polynomial is irreducible mod p.
+# This gives a representation by an irreducible polynomial with "big" coefficients.
+# Arithmetic is then defined naturally.
+#
+#    Below is a log in the Ruby console of some example calculations with the
+# polynomial x^2 + x + 1 realized as an element of the finite field
+# F_11^3 represented by F_11[x] / (x^3 + 9x^2 + 10x + 10)
+#
+# irb(main):130:0> ff = FiniteField.new(11, 3)
+#  Constructing irreducible polynomial...
+#  Found Polynomial of degree 3 mod 11: x^3 + 9x^2 + 10x + 10...
+#  You can now play with this field as it is realized inside F_11[X] / (x^3 + 9x^2 + 10x + 10)
+# => Finite Field of degree 1331 = 11^3 represented by F_1331[x] / (x^3 + 9x^2 + 10x + 10)
+# irb(main):131:0> ffe = FiniteFieldElement.new(ff, 1,1,1)
+# => Polynomial of degree 2 mod 11: x^2 + x + 1 embedded in Finite Field of degree 1331 = 11^3 represented by F_1331[x] / (x^3 + 9x^2 + 10x + 10)
+# irb(main):132:0> ffe + 1
+# => Polynomial of degree 2 mod 11: x^2 + x + 2 embedded in Finite Field of degree 1331 = 11^3 represented by F_1331[x] / (x^3 + 9x^2 + 10x + 10)
+# irb(main):133:0> ffe + 10
+# => Polynomial of degree 2 mod 11: x^2 + x embedded in Finite Field of degree 1331 = 11^3 represented by F_1331[x] / (x^3 + 9x^2 + 10x + 10)
+# irb(main):134:0> ffe * ffe
+# => Polynomial of degree 2 mod 11: x^2 + 7x + 5 embedded in Finite Field of degree 1331 = 11^3 represented by F_1331[x] / (x^3 + 9x^2 + 10x + 10)
+# irb(main):135:0> -ffe
+# => Polynomial of degree 2 mod 11: 10x^2 + 10x + 10 embedded in Finite Field of degree 1331 = 11^3 represented by F_1331[x] / (x^3 + 9x^2 + 10x + 10)
+# irb(main):136:0> ffe - ffe
+# => Polynomial of degree 0 mod 11: 0 embedded in Finite Field of degree 1331 = 11^3 represented by F_1331[x] / (x^3 + 9x^2 + 10x + 10)
+#
 
 class FiniteFieldPolynomial
   attr_accessor :prime, :coefficients, :degree
@@ -42,7 +40,7 @@ class FiniteFieldPolynomial
   end
 
   def is_irreducible
-    for x in 0..(@prime - 1)
+    (0..(@prime - 1)).each do |x|
       return false if self.value(x) == 0
     end
     return true
@@ -64,7 +62,7 @@ class FiniteFieldPolynomial
     self
   end
 
-  def to_s(raw = false)
+  def to_string(raw = false)
     (!raw ? "Polynomial of degree #{degree} mod #{prime}: " : '') +
     @coefficients.each_with_index.map do |c, i|
       deg = @degree - i
@@ -77,6 +75,10 @@ class FiniteFieldPolynomial
       c == 0 && @coefficients.length > 1 ? nil :
         "#{c == 1 && deg > 0 ? '' : c}#{monomial}"
     end.compact.join(' + ')
+  end
+
+  def to_s(*args)
+    self.to_string(*args)
   end
 
   def *(y)
@@ -143,25 +145,36 @@ class FiniteFieldPolynomial
 end
 
 class FiniteField
-  attr_accessor :prime, :exponent, :degree, :polynomial
+  attr_accessor :prime, :exponent, :degree, :polynomial, :default_poly
 
-  def initialize(p, n)
+  def initialize(p, n, poly = nil)
     @prime = p
     @exponent = n
     @degree = p**n
-    puts "Constructing irreducible polynomial..."
-    @polynomial = construct_irreducible_polynomial
-    unless @polynomial
-      raise Exception.new("No irreducible polynomial of degree #{n} mod #{p} found!")
-    end
-    puts "Found #{@polynomial}..."
-    puts <<-end_msg
-You can now play with this field as it is realized inside F_#{p}[X] / (#{@polynomial.to_s(true)})
-    end_msg
+    if poly.nil?
+      @default_poly = true
+      puts "Constructing irreducible polynomial..."
+      @polynomial = construct_irreducible_polynomial
+      unless @polynomial
+        raise Exception.new("No irreducible polynomial of degree #{n} mod #{p} found!")
+      end
+      puts "Found #{@polynomial}..."
+      puts <<-end_msg
+  You can now play with this field as it is realized inside F_#{p}[X] / (#{@polynomial.to_s(true)})
+      end_msg
+    else
+      @default_poly = false
+      if poly.prime != p
+        raise TypeError.new("Passed polynomial must lie in same prime field")
+      elsif poly.degree != n
+        raise TypeError.new("Passed polynomial must have correct degree: #{n}")
+      end
+      @polynomial = poly
+    end 
   end
 
   def self.inverse_in_prime_field(n, p)
-    for x in (1..(p-1)).to_a
+    (1..(p-1)).each do |x|
       return x if (x * n % p) == 1
     end
     return nil # Should never happen
@@ -173,34 +186,53 @@ You can now play with this field as it is realized inside F_#{p}[X] / (#{@polyno
       "#{polynomial.to_s(true)})"
   end
 
-  def multiplication_table(html_file)
-    File.open(html_file, 'w') do |f|
-      f << <<-end_head
-        <html> <head> <style type="text/css"> body {
-        padding: 1em; font-family: georgia; } table tr td {
-        padding: 0.25em; margin: 0; } table thead td {
-        border-bottom: 1px solid #000; } td:first-child {
-        border-right: 1px solid #000; } </style> </head> <body>
-        <h2 style="margin: 0">Multiplication table for
-        F<sub>#{degree}</sub> embedded in F<sub>#{prime}</sub>[X] /
-        (#{polynomial.to_s(true).gsub(/^([0-9]+)/, '<sup>\\1</sup>')})</h2>
-        <h3 style="margin: 0">This was generated in Ruby using
-        <pre style="display: inline-block">
-  FiniteField.new(#{prime}, #{exponent}).multiplication_table('#{html_file}')</pre></h3>
-      end_head
-
-      f << '<table><thead><tr><td> * </td>'
-      all_elements.each { |el| f << "<td>#{el}</td>" }
-      f << "</tr></thead><tbody>\n"
-      all_elements.each do |el|
-        f << "<tr><td>#{el}</td>"
-        all_elements.each do |el2|
-          f << "<td>#{el * el2}</td>"
-        end
-        f << "</tr>\n"
-      end
-      f << '</tbody></table></body></html>'
+  def multiplication_table(f = $std_out || nil)
+    just_body = false
+    if f.is_a?(String)
+      mt_string = "('#{f}')"
+      f = File.open(f, 'w') 
+    elsif f === false
+      just_body = true
+    else
+      mt_string = ''
     end
+    output = ''
+    ffp_string = default_poly ? '' :
+      ", #{polynomial.class.to_s}.new(#{prime},  " +
+      polynomial.coefficients.to_s[1..polynomial.coefficients.to_s.length - 2]
+    finite_field_string = "#{self.class.to_s}.new(#{prime}, #{exponent}#{ffp_string})"
+    unless just_body
+      output += <<-end_head
+      <html> <head> <style type="text/css"> body {
+      padding: 1em; font-family: georgia; } table tr td {
+      padding: 0.25em; margin: 0; } table thead td {
+      border-bottom: 1px solid #000; } td:first-child {
+      border-right: 1px solid #000; } </style> </head> <body>
+    end_head
+    end
+    output += <<-end_header
+      <h2 style="margin: 0">Multiplication table for
+      F<sub>#{degree}</sub> embedded in F<sub>#{prime}</sub>[X] /
+      (#{polynomial.to_string(true).gsub(/^([0-9]+)/, '<sup>\\1</sup>')})</h2>
+      <h3 style="margin: 0">This was generated in Ruby using
+      <pre style="display: inline-block">
+#{finite_field_string}.multiplication_table#{mt_string}</pre></h3>
+    end_header
+
+    output += '<table><thead><tr><td> * </td>'
+    all_elements.each { |el| output += "<td>#{el.to_string(true)}</td>" }
+    output += "</tr></thead><tbody>\n"
+    all_elements.each do |el|
+      output += "<tr><td>#{el.to_string(true)}</td>"
+      all_elements.each do |el2|
+        output += "<td>#{(el * el2).to_string(true)}</td>"
+      end
+      output += "</tr>\n"
+    end
+    output += '</tbody></table>' + (just_body ? '' : '</body></html>')
+    f << output if f.is_a? IO
+    f.close() if f.is_a? File
+    f.is_a?(IO) ? f : output
   end
 
   protected
@@ -208,15 +240,16 @@ You can now play with this field as it is realized inside F_#{p}[X] / (#{@polyno
   def all_elements
     return @all_elements if @all_elements
     list = []
-    coeffs_list = (0..(degree - 1)).to_a
-    for coeff_encoding in coeffs_list
+    coeffs_list = (1..(degree - 1)).to_a
+    coeffs_list.each do |coeff_encoding|
       coeffs = []
       while coeff_encoding != 0
         coeffs += [coeff_encoding % prime]
         coeff_encoding /= prime
+        coeff_encoding = coeff_encoding.floor
       end
-      coeffs += [0] * (exponent - coeffs.length)
-      list << FiniteFieldElement.new(self, *coeffs)
+      coeffs += [0] * (exponent - coeffs.length + 1)
+      list << FiniteFieldElement.new(self, *coeffs.reverse)
     end
     @all_elements = list
   end
@@ -224,13 +257,14 @@ You can now play with this field as it is realized inside F_#{p}[X] / (#{@polyno
   def construct_irreducible_polynomial
     # Super naive way of finding irreducible polynomials
     # of degree n mod p
-    for a_n in 1..(@prime - 1)
+    (1..(@prime - 1)).each do |a_n|
       coeffs_list = (0..(@prime ** @exponent - 1)).to_a.reverse
-      for coeff_encoding in coeffs_list
+      coeffs_list.each do |coeff_encoding|
         coeffs = [a_n]
         while coeff_encoding != 0
           coeffs += [coeff_encoding % @prime]
           coeff_encoding /= @prime
+          coeff_encoding = coeff_encoding.floor
         end
         coeffs += [0]*(@exponent - coeffs.length + 1)
         poly = FiniteFieldPolynomial.new(@prime, *coeffs)
@@ -246,7 +280,14 @@ class FiniteFieldElement < FiniteFieldPolynomial
   attr_accessor :finite_field, :coefficients
 
   def initialize(_finite_field, *_coefficients)
-    if _coefficients[0].is_a? FiniteFieldPolynomial
+    if _finite_field.is_a?(Integer) && _coefficients.length == 1
+      _finite_field = FiniteField.new(_finite_field, _coefficients[0])
+      _coefficients = []
+    end
+
+    if _coefficients.length == 0
+      _coefficients = [1,0]
+    elsif _coefficients[0].is_a? FiniteFieldPolynomial
       _coefficients = _coefficients[0].coefficients
     end
     @finite_field = _finite_field
@@ -268,7 +309,7 @@ class FiniteFieldElement < FiniteFieldPolynomial
       deg_diff = (self.degree - finite_field.exponent)
       new_coeffs = [0] * (deg_diff + 1) +
                     self.coefficients[(-self.finite_field.exponent)..-1]
-      for i in 0..deg_diff
+      (0..deg_diff).each do |i|
         # Replace x^n with coeffs
         extra_coeffs = coeffs + [0] * (deg_diff - i)
         # Pad out zeroes on the left
@@ -294,11 +335,12 @@ class FiniteFieldElement < FiniteFieldPolynomial
     end
 
     coeffs_list = (0..(finite_field.degree - 1)).to_a.reverse
-    for coeff_encoding in coeffs_list
+    coeffs_list.each do |coeff_encoding|
       coeffs = []
       while coeff_encoding != 0
         coeffs += [coeff_encoding % finite_field.prime]
         coeff_encoding /= finite_field.prime
+        coeff_encoding = coeff_encoding.floor
       end
       coeffs += [0] * (finite_field.exponent - coeffs.length)
       poly = FiniteFieldElement.new(finite_field, *coeffs)
@@ -434,3 +476,4 @@ class Fixnum
 
   end
 end
+

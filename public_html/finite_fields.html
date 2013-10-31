@@ -1,0 +1,56 @@
+<html>
+  <head>
+  <script type='text/javascript' src='opal.js'></script>
+  <script type='text/javascript' src='finite_fields.js'></script>
+
+    <style type="text/css">
+      body {
+        padding: 1em;
+        font-family: georgia;
+      }
+      table tr td {
+        padding: 0.25em;
+        margin: 0;
+      }
+      table thead td {
+        border-bottom: 1px solid #000;
+      }
+      td:first-child {
+        border-right: 1px solid #000;
+      }
+      a.opal:hover {
+        background: #000 !important;
+        color: #fff !important;
+      }
+      #mt { padding-top: 2em; }
+    </style>
+
+    <script type="text/javascript">
+      window.onload = function() {
+        var button = document.getElementById('generate')
+        button.onclick = function() {
+          prime = parseInt(document.getElementById('prime').value, 10)
+          exponent = parseInt(document.getElementById('exponent').value, 10)
+          if (isNaN(prime) || isNaN(exponent) || prime < 2 || exponent < 1) return alert('Please enter positive integers')
+          document.getElementById('mt').innerHTML = 'Loading...'
+          setTimeout(function() {
+            ff = Opal.FiniteField.$new(prime,exponent)
+            mt = ff.$multiplication_table(false)
+            document.getElementById('mt').innerHTML = mt
+          }, 100)
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <a class='opal' href="https://github.com/RobertZK/FiniteFields" style="color: #3333AA; text-decoration: none; display: block; position: fixed; right: 50px; bottom: 50px; background: #ccc; color: #000; padding: 0.25em 1em 1em 1em; border: 1px solid #999">
+        Powered by Opal <img src='https://secure.gravatar.com/avatar/88298620949a6534d403da2e356c9339?s=420&d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-org-420.png' width='25' style='margin:0; padding: 0; position: relative; top: 10px'/></div></a>
+    Generate a multiplication table for finite field of prime characteristic
+    <input id="prime" style="width: 50px" value="5">
+    and exponent
+    <input id="exponent" style="width: 50px" value="2">
+    <input type="button" value="Generate" id="generate" />
+    <div id="mt"></div>
+
+  </body>
+</html>

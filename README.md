@@ -3,6 +3,8 @@ FiniteFields
 
 Arithmetic over finite fields in Ruby
 
+Here's an example multiplication table generator: http://therobert.org/finite_fields
+
 Examples
 ========
 

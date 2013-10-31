@@ -142,6 +142,10 @@ class FiniteFieldPolynomial
     (self - y).coefficients == [0]
   end
 
+  #def coerce(y)
+  #  [self, y]
+  #end
+
 end
 
 class FiniteField
@@ -216,16 +220,17 @@ class FiniteField
       (#{polynomial.to_string(true).gsub(/^([0-9]+)/, '<sup>\\1</sup>')})</h2>
       <h3 style="margin: 0">This was generated in Ruby using
       <pre style="display: inline-block">
-#{finite_field_string}.multiplication_table#{mt_string}</pre></h3>
+ #{finite_field_string}.multiplication_table#{mt_string}</pre></h3>
     end_header
 
     output += '<table><thead><tr><td> * </td>'
-    all_elements.each { |el| output += "<td>#{el.to_string(true)}</td>" }
+    filt = ->(str) { str.gsub(/\^([0-9]+)/, '<sup>\\1</sup>') }
+    all_elements.each { |el| output += "<td>#{filt.(el.to_string(true))}</td>" }
     output += "</tr></thead><tbody>\n"
     all_elements.each do |el|
-      output += "<tr><td>#{el.to_string(true)}</td>"
+      output += "<tr><td>#{filt.(el.to_string(true))}</td>"
       all_elements.each do |el2|
-        output += "<td>#{(el * el2).to_string(true)}</td>"
+        output += "<td>#{filt.((el * el2).to_string(true))}</td>"
       end
       output += "</tr>\n"
     end

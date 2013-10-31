@@ -240,6 +240,27 @@ class FiniteFieldElement < FiniteFieldPolynomial
     self
   end
 
+  def inverse
+    # For now use brute force
+    # http://en.wikipedia.org/wiki/Finite_field_arithmetic#Multiplicative_inverse
+    if self.degree == 0
+      return FiniteField.inverse_in_prime_field(self.coefficients[0], finite_field.prime)
+    end
+
+    coeffs_list = (0..(finite_field.degree - 1)).to_a.reverse
+    for coeff_encoding in coeffs_list
+      coeffs = []
+      while coeff_encoding != 0
+        coeffs += [coeff_encoding % finite_field.prime]
+        coeff_encoding /= finite_field.prime
+      end
+      coeffs += [0] * (finite_field.exponent - coeffs.length)
+      poly = FiniteFieldElement.new(finite_field, *coeffs)
+      return poly if poly * self == 1
+    end
+    return nil
+  end
+
   def *(y)
     y = sanity_check y
     self.class.new(self.finite_field, self.to_ffp * y.to_ffp)
@@ -258,12 +279,41 @@ class FiniteFieldElement < FiniteFieldPolynomial
     self + (-y)
   end
 
+  def /(y)
+    y = sanity_check(y)
+    if y == 0
+      raise TypeError.new('Cannot divide by 0')
+    end
+    self * y.inverse
+  end
+
+  def **(n)
+    unless n.is_a?(Integer)
+      raise TypeError.new("Can only raise to integral powers")
+    end
+    if n == 0
+      return self.class.new(self.finite_field, 1) 
+    else
+      poly = self
+      while n > 1
+        poly = poly.send :*, self
+        n -= 1
+      end
+      return poly
+    end
+  end
+
+  def ^(n)
+    raise 'To multiply, use ** instead of ^, because Ruby operator '+
+          'priorities are weird'
+  end
+
   def to_ffp
     FiniteFieldPolynomial.new(self.finite_field.prime, *self.coefficients)
   end
 
-  def to_s
-    super + " embedded in #{finite_field}"
+  def to_s(raw = true)
+    super + (raw ? '' : " embedded in #{finite_field}")
   end
 
   protected
@@ -292,19 +342,28 @@ end
 class Fixnum
   unless method_defined?(:'*_old__FiniteFieldPolynomialHack') &&
          method_defined?(:'+_old__FiniteFieldPolynomialHack') &&
-         method_defined?(:'-_old__FiniteFieldPolynomialHack')
+         method_defined?(:'-_old__FiniteFieldPolynomialHack') &&
+         method_defined?(:'/_old__FiniteFieldPolynomialHack')
 
     alias_method :'*_old__FiniteFieldPolynomialHack', :*
     alias_method :'+_old__FiniteFieldPolynomialHack', :+
     alias_method :'-_old__FiniteFieldPolynomialHack', :-
+    alias_method :'/_old__FiniteFieldPolynomialHack', :/
 
     def -(y)
-      if y.is_a?(FiniteFieldPolynomial)
-        return FiniteFieldPolynomial.new(y.prime, [-self]) - y
-      elsif y.is_a?(FiniteFieldElement)
-        return FiniteFieldElement.new(y.finite_field, [-self]) - y
+      if y.is_a?(FiniteFieldElement)
+        return FiniteFieldElement.new(y.finite_field, -self) - y
+      elsif y.is_a?(FiniteFieldPolynomial)
+        return FiniteFieldPolynomial.new(y.prime, -self) - y
       end
       return self.send :'-_old__FiniteFieldPolynomialHack', y
+    end
+
+    def /(y)
+      if y.is_a?(FiniteFieldElement)
+        return FiniteFieldElement.new(y.finite_field, self) / y
+      end
+      return self.send :'/_old__FiniteFieldPolynomialHack', y
     end
 
     def +(y)
@@ -320,5 +379,6 @@ class Fixnum
       end
       return self.send :'*_old__FiniteFieldPolynomialHack', y
     end
+
   end
 end

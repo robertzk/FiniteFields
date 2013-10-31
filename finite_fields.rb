@@ -173,7 +173,39 @@ You can now play with this field as it is realized inside F_#{p}[X] / (#{@polyno
       "#{polynomial.to_s(true)})"
   end
 
+  def multiplication_table(html_file)
+    File.open(html_file, 'w') do |f|
+      f << '<table><thead><tr><td> * </td>'
+      all_elements.each { |el| f << "<td>#{el}</td>" }
+      f << "</tr></thead><tbody>\n"
+      all_elements.each do |el|
+        f << "<tr><td>#{el}</td>"
+        all_elements.each do |el2|
+          f << "<td>#{el * el2}</td>"
+        end
+        f << "</tr>\n"
+      end
+      f << '</tbody></table>'
+    end
+  end
+
   protected
+
+  def all_elements
+    return @all_elements if @all_elements
+    list = []
+    coeffs_list = (0..(degree - 1)).to_a
+    for coeff_encoding in coeffs_list
+      coeffs = []
+      while coeff_encoding != 0
+        coeffs += [coeff_encoding % prime]
+        coeff_encoding /= prime
+      end
+      coeffs += [0] * (exponent - coeffs.length)
+      list << FiniteFieldElement.new(self, *coeffs)
+    end
+    @all_elements = list
+  end
 
   def construct_irreducible_polynomial
     # Super naive way of finding irreducible polynomials
@@ -186,7 +218,7 @@ You can now play with this field as it is realized inside F_#{p}[X] / (#{@polyno
           coeffs += [coeff_encoding % @prime]
           coeff_encoding /= @prime
         end
-        coeffs += [0] while coeffs.length <= @exponent
+        coeffs += [0]*(@exponent - coeffs.length + 1)
         poly = FiniteFieldPolynomial.new(@prime, *coeffs)
         return poly if poly.is_irreducible
       end
@@ -294,9 +326,15 @@ class FiniteFieldElement < FiniteFieldPolynomial
     if n == 0
       return self.class.new(self.finite_field, 1) 
     else
-      poly = self
+      if n < 0
+        initpoly = self.inverse
+        n = -n
+      else
+        initpoly = self.dup
+      end
+      poly = initpoly.dup
       while n > 1
-        poly = poly.send :*, self
+        poly = poly.send :*, initpoly
         n -= 1
       end
       return poly

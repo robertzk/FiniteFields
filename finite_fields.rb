@@ -175,6 +175,20 @@ You can now play with this field as it is realized inside F_#{p}[X] / (#{@polyno
 
   def multiplication_table(html_file)
     File.open(html_file, 'w') do |f|
+      f << <<-end_head
+        <html> <head> <style type="text/css"> body {
+        padding: 1em; font-family: georgia; } table tr td {
+        padding: 0.25em; margin: 0; } table thead td {
+        border-bottom: 1px solid #000; } td:first-child {
+        border-right: 1px solid #000; } </style> </head> <body>
+        <h2 style="margin: 0">Multiplication table for
+        F<sub>#{degree}</sub> embedded in F<sub>#{prime}</sub>[X] /
+        (#{polynomial.to_s(true).gsub(/^([0-9]+)/, '<sup>\\1</sup>')})</h2>
+        <h3 style="margin: 0">This was generated in Ruby using
+        <pre style="display: inline-block">
+  FiniteField.new(#{prime}, #{exponent}).multiplication_table('#{html_file}')</pre></h3>
+      end_head
+
       f << '<table><thead><tr><td> * </td>'
       all_elements.each { |el| f << "<td>#{el}</td>" }
       f << "</tr></thead><tbody>\n"
@@ -185,7 +199,7 @@ You can now play with this field as it is realized inside F_#{p}[X] / (#{@polyno
         end
         f << "</tr>\n"
       end
-      f << '</tbody></table>'
+      f << '</tbody></table></body></html>'
     end
   end
 

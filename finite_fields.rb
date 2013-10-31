@@ -210,11 +210,7 @@ class FiniteFieldElement < FiniteFieldPolynomial
 
   def simplify!
     super
-    #if self.degree < finite_field.exponent
-    #  self.coefficients = ([0]*(finite_field.exponent - self.degree) +
-    #                       self.coefficients
-    #  self.degree = finite_field.exponent
-    #else if
+
     if self.degree >= finite_field.exponent
       coeffs = (-finite_field.polynomial).coefficients[1..-1]
       @inverse_of_leading_coefficient ||=

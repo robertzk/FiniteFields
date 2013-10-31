@@ -226,7 +226,7 @@ class FiniteField
   def all_elements
     return @all_elements if @all_elements
     list = []
-    coeffs_list = (0..(degree - 1)).to_a
+    coeffs_list = (1..(degree - 1)).to_a
     for coeff_encoding in coeffs_list
       coeffs = []
       while coeff_encoding != 0
@@ -234,7 +234,7 @@ class FiniteField
         coeff_encoding /= prime
       end
       coeffs += [0] * (exponent - coeffs.length)
-      list << FiniteFieldElement.new(self, *coeffs)
+      list << FiniteFieldElement.new(self, *coeffs.reverse)
     end
     @all_elements = list
   end

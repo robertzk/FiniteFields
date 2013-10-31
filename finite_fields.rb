@@ -4,31 +4,31 @@
  1..p-1 as the candidates for the leading coefficient of a polynomial
  P(x) in the ring F_p[x] of polynomials over F_p, then using the digits
  of p^(n-1) - 1 through 0 in base p for the rest of the coefficients,
-and attempting to check if each such enumerated polynomial is irreducible mod p.
-This gives a representation by an irreducible polynomial with "big" coefficients.
-Arithmetic is then defined naturally.
+ and attempting to check if each such enumerated polynomial is irreducible mod p.
+ This gives a representation by an irreducible polynomial with "big" coefficients.
+ Arithmetic is then defined naturally.
 
-   Below is a log in the Ruby console of some example calculations with the
-polynomial x^2 + x + 1 realized as an element of the finite field
-F_11^3 represented by F_11[x] / (x^3 + 9x^2 + 10x + 10)
+    Below is a log in the Ruby console of some example calculations with the
+ polynomial x^2 + x + 1 realized as an element of the finite field
+ F_11^3 represented by F_11[x] / (x^3 + 9x^2 + 10x + 10)
 
-   irb(main):130:0> ff = FiniteField.new(11, 3)
-    Constructing irreducible polynomial...
-    Found Polynomial of degree 3 mod 11: x^3 + 9x^2 + 10x + 10...
-    You can now play with this field as it is realized inside F_11[X] / (x^3 + 9x^2 + 10x + 10)
-   => Finite Field of degree 1331 = 11^3 represented by F_1331[x] / (x^3 + 9x^2 + 10x + 10)
-   irb(main):131:0> ffe = FiniteFieldElement.new(ff, 1,1,1)
-   => Polynomial of degree 2 mod 11: x^2 + x + 1 embedded in Finite Field of degree 1331 = 11^3 represented by F_1331[x] / (x^3 + 9x^2 + 10x + 10)
-   irb(main):132:0> ffe + 1
-   => Polynomial of degree 2 mod 11: x^2 + x + 2 embedded in Finite Field of degree 1331 = 11^3 represented by F_1331[x] / (x^3 + 9x^2 + 10x + 10)
-   irb(main):133:0> ffe + 10
-   => Polynomial of degree 2 mod 11: x^2 + x embedded in Finite Field of degree 1331 = 11^3 represented by F_1331[x] / (x^3 + 9x^2 + 10x + 10)
-   irb(main):134:0> ffe * ffe
-   => Polynomial of degree 2 mod 11: x^2 + 7x + 5 embedded in Finite Field of degree 1331 = 11^3 represented by F_1331[x] / (x^3 + 9x^2 + 10x + 10)
-   irb(main):135:0> -ffe
-   => Polynomial of degree 2 mod 11: 10x^2 + 10x + 10 embedded in Finite Field of degree 1331 = 11^3 represented by F_1331[x] / (x^3 + 9x^2 + 10x + 10)
-   irb(main):136:0> ffe - ffe
-   => Polynomial of degree 0 mod 11: 0 embedded in Finite Field of degree 1331 = 11^3 represented by F_1331[x] / (x^3 + 9x^2 + 10x + 10)
+ irb(main):130:0> ff = FiniteField.new(11, 3)
+  Constructing irreducible polynomial...
+  Found Polynomial of degree 3 mod 11: x^3 + 9x^2 + 10x + 10...
+  You can now play with this field as it is realized inside F_11[X] / (x^3 + 9x^2 + 10x + 10)
+ => Finite Field of degree 1331 = 11^3 represented by F_1331[x] / (x^3 + 9x^2 + 10x + 10)
+ irb(main):131:0> ffe = FiniteFieldElement.new(ff, 1,1,1)
+ => Polynomial of degree 2 mod 11: x^2 + x + 1 embedded in Finite Field of degree 1331 = 11^3 represented by F_1331[x] / (x^3 + 9x^2 + 10x + 10)
+ irb(main):132:0> ffe + 1
+ => Polynomial of degree 2 mod 11: x^2 + x + 2 embedded in Finite Field of degree 1331 = 11^3 represented by F_1331[x] / (x^3 + 9x^2 + 10x + 10)
+ irb(main):133:0> ffe + 10
+ => Polynomial of degree 2 mod 11: x^2 + x embedded in Finite Field of degree 1331 = 11^3 represented by F_1331[x] / (x^3 + 9x^2 + 10x + 10)
+ irb(main):134:0> ffe * ffe
+ => Polynomial of degree 2 mod 11: x^2 + 7x + 5 embedded in Finite Field of degree 1331 = 11^3 represented by F_1331[x] / (x^3 + 9x^2 + 10x + 10)
+ irb(main):135:0> -ffe
+ => Polynomial of degree 2 mod 11: 10x^2 + 10x + 10 embedded in Finite Field of degree 1331 = 11^3 represented by F_1331[x] / (x^3 + 9x^2 + 10x + 10)
+ irb(main):136:0> ffe - ffe
+ => Polynomial of degree 0 mod 11: 0 embedded in Finite Field of degree 1331 = 11^3 represented by F_1331[x] / (x^3 + 9x^2 + 10x + 10)
 
 =end
 

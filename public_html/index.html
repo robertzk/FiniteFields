@@ -98,7 +98,7 @@
           var x_index = get_index(td)
           var y_index = get_index(td.parent('tr'))
           if (x_index >= 1 && y_index >= 0) {
-            $("#mt tbody tr:nth-child(" + (y_index+1) + ") td, #mt tbody tr td:nth-child(" + (x_index+1) + ")").addClass('selected')
+            $("#mt tbody tr:nth-child(" + (y_index+1) + ") td, #mt tr td:nth-child(" + (x_index+1) + ")").addClass('selected')
           }
         }).delegate('tbody td', 'mouseout', function(e) {
           $("#mt td.selected").removeClass('selected')

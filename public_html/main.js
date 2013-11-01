@@ -21,6 +21,11 @@ window.onload = function() {
       e.preventDefault()
       return(false)
     }
+    if (exponent > 10 || prime > 100 || Math.pow(prime, exponent) > 1000) {
+      alert('You should know better. There is no way your poor little computer could handle that number. ;)')
+      e.preventDefault()
+      return(false)
+    }
     document.getElementById('mt').innerHTML = 'Loading...'
     setTimeout(function() {
       var ff = Opal.FiniteField.$new(prime,exponent)

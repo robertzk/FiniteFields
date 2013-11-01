@@ -68,7 +68,7 @@ td {
   font-family: georgia;
   padding: 0.35em;
   background: #fff;
-  border: 0px dashed #999;
+  border: 1px dashed #999;
   font-size: 1.5em;
   text-align: center;
   width: 50px;
@@ -79,6 +79,7 @@ td {
   text-align: center;
   color: #fff;
   margin-right:1em;
+  border: 0;
   border-radius: 10px;
   position: relative;
   box-shadow: 4px 4px 2px #888888;

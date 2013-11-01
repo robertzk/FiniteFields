@@ -138,7 +138,7 @@
           setTimeout(function() {
             var ff = Opal.FiniteField.$new(prime,exponent)
             var mt = ff.$multiplication_table(false)
-            if (symbol != 'x') mt = mt.replace(/x/g, symbol)
+            if (symbol != 'x') mt = mt.replace(/x/gi, symbol)
             document.getElementById('mt').innerHTML = mt
           }, 100)
           e.preventDefault()

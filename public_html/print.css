@@ -1,0 +1,39 @@
+.opal, #desc, h3 {
+  display: none !important;
+}
+body {
+  font-family: georgia;
+}
+table {
+  margin-top: 2em;
+  border-collapse: collapse;
+}
+table tr td {
+  padding: 0.25em;
+  margin: 0;
+}
+table thead tr td:first-child {
+  font-size: 1.5em;
+  border-right: 2px solid #000;
+  border-bottom: 2px solid #000;
+  padding-top: 0.5em;
+  text-align: center;
+}
+table thead tr td {
+  border-top: 1px solid #000;
+  color: #000;
+  padding: 0 0.5em;
+  text-align: center;
+  border-bottom: 2px solid #000;
+}
+td {
+  border-right: 1px dashed #000;
+  border-bottom: 1px dashed #000;
+  white-space: nowrap
+}
+td:first-child {
+  text-align: center;
+  color: #000;
+  border-left: 1px solid #000;
+  border-right: 2px solid #000;
+}

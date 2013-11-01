@@ -217,7 +217,7 @@ class FiniteField
     output += <<-end_header
       <h2 style="margin: 0">Multiplication table for
       F<sub>#{degree}</sub> embedded in F<sub>#{prime}</sub>[X] /
-      (#{polynomial.to_string(true).gsub(/^([0-9]+)/, '<sup>\\1</sup>')})</h2>
+      (#{polynomial.to_string(true).gsub(/\^([0-9]+)/, '<sup>\\1</sup>')})</h2>
       <h3 style="margin: 0">This was generated in Ruby using
       <pre style="display: inline-block">
  #{finite_field_string}.multiplication_table#{mt_string}</pre></h3>

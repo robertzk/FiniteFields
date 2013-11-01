@@ -1,3 +1,5 @@
+if (!console || !console.log) (console = {}).log = function() {} // IE
+
 function getQueryVariable(variable) {
   var query = window.location.search.substring(1);
   var vars = query.split('&');
@@ -33,6 +35,12 @@ window.onload = function() {
       if (symbol != 'x') mt = mt.replace(/x/gi, symbol)
       document.getElementById('mt').innerHTML = mt
     }, 100)
+    var url = window.location.href.replace(/\?.*/, '') + '?'
+    url = url + $.map({ prime: prime, exponent: exponent, symbol: symbol },
+      function (value, key) {
+        return encodeURIComponent(key) + '=' + encodeURIComponent(value)
+      }).join('&')
+    if (history.pushState) history.pushState('data', '', url)
     e.preventDefault()
     return false;
   })

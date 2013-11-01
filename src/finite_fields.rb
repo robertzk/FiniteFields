@@ -245,7 +245,7 @@ class FiniteField
   def all_elements
     return @all_elements if @all_elements
     list = []
-    coeffs_list = (1..(degree - 1)).to_a
+    coeffs_list = (1..(degree - 1))
     coeffs_list.each do |coeff_encoding|
       coeffs = []
       while coeff_encoding != 0
@@ -339,7 +339,7 @@ class FiniteFieldElement < FiniteFieldPolynomial
       return FiniteField.inverse_in_prime_field(self.coefficients[0], finite_field.prime)
     end
 
-    coeffs_list = (0..(finite_field.degree - 1)).to_a.reverse
+    coeffs_list = (1..(finite_field.degree - 1))
     coeffs_list.each do |coeff_encoding|
       coeffs = []
       while coeff_encoding != 0

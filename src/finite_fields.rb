@@ -263,7 +263,7 @@ class FiniteField
     # Super naive way of finding irreducible polynomials
     # of degree n mod p
     (1..(@prime - 1)).each do |a_n|
-      coeffs_list = (0..(@prime ** @exponent - 1)).to_a.reverse
+      coeffs_list = (@prime ** (@exponent - 1) + 1..(@prime ** @exponent - 1))
       coeffs_list.each do |coeff_encoding|
         coeffs = [a_n]
         while coeff_encoding != 0

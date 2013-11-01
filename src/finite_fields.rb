@@ -159,13 +159,16 @@ class FiniteField
       @default_poly = true
       puts "Constructing irreducible polynomial..."
       @polynomial = construct_irreducible_polynomial
-      unless @polynomial
+      if !(@exponent == 1 || @polynomial)
         raise Exception.new("No irreducible polynomial of degree #{n} mod #{p} found!")
-      end
-      puts "Found #{@polynomial}..."
-      puts <<-end_msg
+      elsif @polynomial
+        puts "Found #{@polynomial}..."
+        puts <<-end_msg
   You can now play with this field as it is realized inside F_#{p}[X] / (#{@polynomial.to_s(true)})
-      end_msg
+        end_msg
+      else
+        @polynomial = FiniteFieldPolynomial.new(p, 1, 0)
+      end
     else
       @default_poly = false
       if poly.prime != p
@@ -186,8 +189,8 @@ class FiniteField
 
   def to_s
     deg = exponent > 1 ? "#{degree} = #{prime}^#{exponent}" : degree
-    "Finite Field of degree #{deg} represented by F_#{degree}[x] / (" +
-      "#{polynomial.to_s(true)})"
+    "Finite Field of degree #{deg}" +
+      (exponent > 1 ? "represented by F_#{degree}[x] / (#{polynomial.to_s(true)})" : '')
   end
 
   def multiplication_table(f = $std_out || nil)
@@ -291,7 +294,11 @@ class FiniteFieldElement < FiniteFieldPolynomial
     end
 
     if _coefficients.length == 0
-      _coefficients = [1,0]
+      if _finite_field.exponent > 1
+        _coefficients = [1,0]
+      else
+        _coefficients = [1]
+      end
     elsif _coefficients[0].is_a? FiniteFieldPolynomial
       _coefficients = _coefficients[0].coefficients
     end
@@ -303,7 +310,10 @@ class FiniteFieldElement < FiniteFieldPolynomial
   def simplify!
     super
 
-    if self.degree >= finite_field.exponent
+    if finite_field.exponent == 1
+      self.coefficients = [self.coefficients.last % prime]
+      return self
+    elsif self.degree >= finite_field.exponent
       coeffs = (-finite_field.polynomial).coefficients[1..-1]
       @inverse_of_leading_coefficient ||=
         FiniteField.inverse_in_prime_field(

@@ -56,7 +56,57 @@
         background: #000 !important;
         color: #fff !important;
       }
-      #mt { padding-top: 2em; }
+      #mt {
+        margin-top: 2em;
+        padding: 1em;
+        background: #ddd;
+        border: 2px dashed #333;
+        display: inline-block
+      }
+      td { 
+
+        background-color: #eee;
+      }
+      #desc {
+        font-size: 1.2em;
+      }
+
+      #desc input {
+        font-family: georgia;
+        padding: 0.35em;
+        background: #fff;
+        border: 0px dashed #999;
+        font-size: 1.5em;
+        text-align: center;
+        width: 50px;
+      }
+      #desc input[type="button"] {
+        text-shadow: 1px 1px #888;
+        width: 170px; 
+        text-align: center;
+        color: #fff;
+        margin-right:1em;
+        border-radius: 10px;
+        position: relative;
+        box-shadow: 4px 4px 2px #888888;
+        cursor: pointer;
+
+        background: rgb(181,189,200); /* Old browsers */
+        background: -moz-linear-gradient(top, rgba(181,189,200,1) 0%, rgba(130,140,149,1) 36%, rgba(40,52,59,1) 100%); /* FF3.6+ */
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(181,189,200,1)), color-stop(36%,rgba(130,140,149,1)), color-stop(100%,rgba(40,52,59,1))); /* Chrome,Safari4+ */
+        background: -webkit-linear-gradient(top, rgba(181,189,200,1) 0%,rgba(130,140,149,1) 36%,rgba(40,52,59,1) 100%); /* Chrome10+,Safari5.1+ */
+        background: -o-linear-gradient(top, rgba(181,189,200,1) 0%,rgba(130,140,149,1) 36%,rgba(40,52,59,1) 100%); /* Opera 11.10+ */
+        background: -ms-linear-gradient(top, rgba(181,189,200,1) 0%,rgba(130,140,149,1) 36%,rgba(40,52,59,1) 100%); /* IE10+ */
+        background: linear-gradient(to bottom, rgba(181,189,200,1) 0%,rgba(130,140,149,1) 36%,rgba(40,52,59,1) 100%); /* W3C */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b5bdc8', endColorstr='#28343b',GradientType=0 ); /* IE6-9 */
+
+        margin-left: 1em;
+      }
+      #desc input[type="button"]:hover {
+        top: 2px;
+        left: 2px;
+        box-shadow: 2px 2px 1px #888888;
+      }
     </style>
 
     <script type="text/javascript">
@@ -109,11 +159,13 @@
   <body>
     <a class='opal' href="https://github.com/RobertZK/FiniteFields" style="color: #3333AA; text-decoration: none; display: block; position: fixed; right: 50px; top: 40px; background: #ccc; color: #000; padding: 0.25em 1em 1em 1em; border: 1px solid #999; border-radius: 10px">
         Powered by Opal <img src='opal.png' width='25' style='margin:0; padding: 0; position: relative; top: 10px'/></div></a>
-    Generate a multiplication table for finite field of prime characteristic
-    <input id="prime" style="width: 50px" value="5">
-    and exponent
-    <input id="exponent" style="width: 50px" value="2">
+    <div id="desc">
     <input type="button" value="Generate" id="generate" />
+    a multiplication table for finite field of prime characteristic
+    <input id="prime" value="5" type='text'>
+    and exponent
+    <input id="exponent" value="2" type='text'>
+  </div>
     <div id="mt"></div>
 
   </body>

@@ -1,4 +1,4 @@
-FiniteFields
+Finite Field Arithmetic in Ruby
 ============
 
 Arithmetic over finite fields in Ruby

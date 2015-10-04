@@ -208,24 +208,7 @@ class FiniteField
       ", #{polynomial.class.to_s}.new(#{prime},  " +
       polynomial.coefficients.to_s[1..polynomial.coefficients.to_s.length - 2]
     finite_field_string = "#{self.class.to_s}.new(#{prime}, #{exponent}#{ffp_string})"
-    unless just_body
-      output += <<-end_head
-      <html> <head> <style type="text/css"> body {
-      padding: 1em; font-family: georgia; } table tr td {
-      padding: 0.25em; margin: 0; } table thead td {
-      border-bottom: 1px solid #000; } td:first-child {
-      border-right: 1px solid #000; } </style> </head> <body>
-    end_head
-    end
-    output += <<-end_header
-      <h2 style="margin: 0;padding-bottom: 1em;">Multiplication table for
-      F<sub>#{degree}</sub> embedded in F<sub>#{prime}</sub>[X] /
-      (#{polynomial.to_string(true).gsub(/\^([0-9]+)/, '<sup>\\1</sup>')})</h2>
-      <h3 style="margin: 0;display: none;">This was generated in Ruby using
-      <pre style="display: inline-block">
- #{finite_field_string}.multiplication_table#{mt_string}</pre></h3>
-    end_header
-
+    output += html_header(just_body: just_body)
     output += '<table><thead><tr><td> * </td>'
     filt = ->(str) { str.gsub(/\^([0-9]+)/, '<sup>\\1</sup>') }
     all_elements.each { |el| output += "<td>#{filt.(el.to_string(true))}</td>" }
@@ -241,6 +224,31 @@ class FiniteField
     f << output if f.is_a? IO
     f.close() if f.is_a? File
     f.is_a?(IO) ? f : output
+  end
+
+  private
+
+  def html_header(just_body: true)
+    # TODO: (RK) Figure out how to make this cleaner and where it really belongs.
+    output = ""
+    unless just_body
+      output += <<-end_head
+        <html> <head> <style type="text/css"> body {
+        padding: 1em; font-family: georgia; } table tr td {
+        padding: 0.25em; margin: 0; } table thead td {
+        border-bottom: 1px solid #000; } td:first-child {
+        border-right: 1px solid #000; } </style> </head> <body>
+      end_head
+    end
+
+    output + <<-end_header
+      <h2 style="margin: 0;padding-bottom: 1em;">Multiplication table for
+      F<sub>#{degree}</sub> embedded in F<sub>#{prime}</sub>[X] /
+      (#{polynomial.to_string(true).gsub(/\^([0-9]+)/, '<sup>\\1</sup>')})</h2>
+      <h3 style="margin: 0;display: none;">This was generated in Ruby using
+      <pre style="display: inline-block">
+#{finite_field_string}.multiplication_table#{mt_string}</pre></h3>
+    end_header
   end
 
   protected
